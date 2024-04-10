@@ -45,14 +45,16 @@ def main(org_name, network_name):
               inv_writer = csv.writer(csvfile, dialect="excel")
               # Write header row
               inv_writer.writerow(
-                  ("gateway",
-                   "interface",
+                  ("Interface",
+                   "Status",
                    "ip",
-                   "status"
+                   "gateway"
                    ))
               
               for device in wan_stats:
-                  inv_writer.writerow(device['uplinks'])
+                  for uplink in device['uplinks']:
+                       inv_writer.writerow([uplink['interface'], uplink['status'], uplink['ip'], uplink['gateway']])
+                  
     
        
 
