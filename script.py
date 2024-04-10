@@ -1,8 +1,10 @@
 import argparse
 import requests
 import json
+import urllib.parse
 import openpyxl
 from openpyxl.styles import Alignment
+
 
 # Replace with your Meraki API key
 MERAKI_API_KEY = '265ec40a39f861984f644977ca0c4d8abf586234'
@@ -16,19 +18,23 @@ def get_organization_id(org_name):
         'X-Cisco-Meraki-API-Key': MERAKI_API_KEY,
         'Content-Type': 'application/json'
     }
+
+     # Encode the organization name to handle spaces
+    encoded_org_name = urllib.parse.quote(org_name)
+
     response = requests.get(url, headers=headers)
     organizations = response.json()
 
     for org in organizations:
         if org['name'] == org_name:
-            return org['id']
+            return org['id']              
     return None
 
 def get_network_topology(network_id):
     """
     Retrieves the network topology for the given network ID.
     """
-    url = f'https://api.meraki.com/api/v1/networks/{network_id}/topology/list'
+    url = f'https://api.meraki.com/api/v1/networks/{network_id}/topology/linkLayer'
     headers = {
         'X-Cisco-Meraki-API-Key': MERAKI_API_KEY,
         'Content-Type': 'application/json'
@@ -40,7 +46,7 @@ def get_wan_stats(network_id):
     """
     Retrieves the WAN statistics for the given network ID.
     """
-    url = f'https://api.meraki.com/api/v1/networks/{network_id}/uplinks'
+    url = f'https://api.meraki.com/api/v1/organizations/{get_organization_id}/uplinks/statuses?{network_id}'
     headers = {
         'X-Cisco-Meraki-API-Key': MERAKI_API_KEY,
         'Content-Type': 'application/json'
