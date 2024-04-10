@@ -1,4 +1,5 @@
 import argparse
+import csv
 import meraki
 import json
 import os
@@ -32,6 +33,26 @@ def main(org_name, network_name):
     pprint(topology)
     wan_stats = dashboard.appliance.getOrganizationApplianceUplinkStatuses(organizationId=org_id, networkId=network_id)
     pprint(wan_stats)
+
+
+    #Generate CSV file of data
+    now = datetime.now()
+    inventory_file = f'{now.strftime("%Y-%m-%d-%H-%M-%S")}_{network_name}_network_inventory.csv'
+
+    print(f'Writing inventory to file {inventory_file}.')
+
+    with open(inventory_file, 'w', newline='') as csvfile:
+              inv_writer = csv.writer(csvfile, dialect="excel")
+              # Write header row
+              inv_writer.writerow(
+                  ("gateway",
+                   "interface",
+                   "ip",
+                   "status"
+                   ))
+              
+              for device in wan_stats:
+                  inv_writer.writerow(device['uplinks'])
     
        
 

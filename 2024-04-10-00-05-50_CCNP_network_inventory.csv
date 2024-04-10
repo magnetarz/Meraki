@@ -1,0 +1,8 @@
+gateway,interface,ip,status
+
+
+
+"{'interface': 'wan1', 'status': 'not connected', 'ip': '10.10.10.118', 'gateway': '10.10.10.254', 'publicIp': '64.103.26.57', 'primaryDns': '10.10.10.1', 'secondaryDns': '0.0.0.0', 'ipAssignedBy': 'dhcp'}"
+
+
+
